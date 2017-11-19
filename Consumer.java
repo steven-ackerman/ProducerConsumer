@@ -1,51 +1,57 @@
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class Consumer implements Runnable{
-	LinkedBlockingQueue<String> bounded = new LinkedBlockingQueue<String>();
+	//LinkedBlockingQueue<String> bounded = new LinkedBlockingQueue<String>();
+	public static LinkedBlockingQueue<String> consumerBound;
+	public int counter = 0;
+	public int uniqueID;
+	
 	//Constructor
-	public Consumer() {
+	public Consumer(int uniqueID) {
 		//this.bounded = Producer.bound;
-		this.bounded = Producer.bound;
+		this.uniqueID = uniqueID;
 	}
 
 	@Override
 	public void run() {
+		
 		// TODO Auto-generated method stub
 		//if (bounded != null) {
 		int count = 0;
 		boolean running = Producer.isRunning();
-		//while (running = true) {
-			
-		for (int i = 1; i <= 1000; i++) {
-			try {
-				// String dataTaken = this.bounded.take();
-				this.bounded.take();
-				running = Producer.isRunning();
-				count++;
-				if (count % 100 == 0) {
-					System.out.println("Current Consumer Count: " + count);
-					// System.out.println(bounded);
-					System.out.println("Current Size:" + this.bounded.size());
-				} else if (count <= 100) {
-					System.out.println("Current Consumer Count: " + count);
-					System.out.println("Current Size: " + this.bounded.size());
+		while (running || Producer.bound.size() >= 1) {
+			int consumerBoundSize = consumerBound.size();
+			if (consumerBoundSize >= 1) {
+				try {
+					//Thread.sleep(500);
+					consumerBound.poll(50L, TimeUnit.MILLISECONDS);
+					counter++;
+					count++;
+					//Thread.sleep(10);
+					if (count % 100 == 0) {
+						System.out.println("Consumer "+getUniqueID()+" Has Consumed "+count+" Events");
+						//System.out.println("Current Producer Size:" + Producer.bound.size());
+
+					}
+
+					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-
-				// Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// Catch Block if retrieve and remove does not work for the element at the head
-				// of this queue.
-				e.printStackTrace();
-			} // End Catch
-
-		} // End For Loop
-			
-		//}//End While
+				
+				
+			} // End if Loop
+			running = Producer.isRunning();
+		}//End While
 		
 	}//End Run Method
-	public static int getConsumerCount() {
-		int currentObjectCount = 0;
-		return currentObjectCount;
+	public int getConsumerCount() {
+		
+		return counter;
+	}
+	public int getUniqueID() {
+		return this.uniqueID;
 	}
 
 }//End Class
