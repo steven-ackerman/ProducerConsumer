@@ -3,29 +3,27 @@ import java.util.concurrent.TimeUnit;
 
 public class Consumer implements Runnable{
 	//LinkedBlockingQueue<String> bounded = new LinkedBlockingQueue<String>();
+	public static int globalCounter = 0;
 	public static LinkedBlockingQueue<String> consumerBound;
 	public int counter = 0;
 	public int uniqueID;
 	
 	//Constructor
 	public Consumer(int uniqueID) {
-		//this.bounded = Producer.bound;
 		this.uniqueID = uniqueID;
 	}
 
 	@Override
 	public void run() {
 		
-		// TODO Auto-generated method stub
-		//if (bounded != null) {
+		
 		int count = 0;
 		boolean running = Producer.isRunning();
 		while (running || Producer.bound.size() >= 1) {
 			int consumerBoundSize = consumerBound.size();
 			if (consumerBoundSize >= 1) {
 				try {
-					//Thread.sleep(500);
-					consumerBound.poll(50L, TimeUnit.MILLISECONDS);
+					consumerBound.poll(5000L, TimeUnit.MILLISECONDS);
 					counter++;
 					count++;
 					//Thread.sleep(10);

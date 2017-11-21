@@ -15,13 +15,12 @@ public class Producer implements Runnable{
 		//Creates Loop that makes 1000 random doubles as strings.
 		running = true;
 		int count = 0;
-		for (int i = 1; i<=1000; i++) {
+		for (int i = 1; i<= 1000; i++) {
 			double number = Math.random();
 			String stringDouble = Double.toString(number);
 			try {
 				Producer.bound.put(stringDouble);
 				count++;
-				//System.out.println(bound.toString());
 				if (count % 100 == 0) {
 					System.out.println("Producer "+getUniqueID()+" has produced "+count+" events.");
 				}
